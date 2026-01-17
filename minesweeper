@@ -7,22 +7,12 @@ class MinesweeperGame:
     def __init__(self, master):
         self.master = master
         self.master.title("Minesweeper")
-        self.setup_menu()
+        self.start_game()
 
     def quit_app(self):
         sys.exit()
 
-    def setup_menu(self):
-        self.menu_frame = tk.Frame(self.master)
-        self.menu_frame.pack(padx = 50, pady = 50)
-        
-        tk.Label(self.menu_frame, text="MINESWEEPER").pack(padx = 10, pady = 10)
-        
-        tk.Button(self.menu_frame, text="START", width=20, height=2, command=self.start_game).pack(padx = 20, pady = 20)
-
     def start_game(self):
-        self.menu_frame.destroy()
-        
         self.rows = 12
         self.cols = 12
         self.mines_count = 25
@@ -58,8 +48,6 @@ class MinesweeperGame:
                 bttn.bind("<Button-3>", lambda e, r=r, c=c: self.handle_flag(r, c))
                 bttn.grid(row=r, column=c)
                 self.buttons[r][c] = bttn
-        
-        tk.Button(self.master, text="Main Menu", command=self.restart).pack()
 
     def place_mines(self):
         all_positions = []
@@ -139,7 +127,7 @@ class MinesweeperGame:
     def restart(self):
         for widget in self.master.winfo_children():
             widget.destroy()
-        self.setup_menu()
+        self.start_game()
 
 root = tk.Tk()
 MinesweeperGame(root)
