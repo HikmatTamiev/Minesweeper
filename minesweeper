@@ -35,7 +35,13 @@ class MinesweeperGame:
             for c in range(self.cols):
                 new_row.append(0)
             self.logic_board.append(new_row)
-        self.buttons = {}
+        
+        self.buttons = []
+        for r in range(self.rows):
+            row_list = []
+            for c in range(self.cols):
+                row_list.append(None) 
+            self.buttons.append(row_list)
         
         self.create_grid()
         self.place_mines()
@@ -51,7 +57,7 @@ class MinesweeperGame:
                 bttn.bind("<Button-1>", lambda e, r=r, c=c: self.handle_reveal(r, c))
                 bttn.bind("<Button-3>", lambda e, r=r, c=c: self.handle_flag(r, c))
                 bttn.grid(row=r, column=c)
-                self.buttons[(r, c)] = bttn
+                self.buttons[r][c] = bttn
         
         tk.Button(self.master, text="Main Menu", command=self.restart).pack()
 
@@ -80,7 +86,7 @@ class MinesweeperGame:
                 self.logic_board[r][c] = mine_sum
 
     def handle_reveal(self, r, c):
-        if self.buttons[(r, c)]['text'] == "F":
+        if self.buttons[r][c]['text'] == "F":
             return
 
         if self.logic_board[r][c] == "M":
@@ -92,7 +98,7 @@ class MinesweeperGame:
                 self.end_game("You revealed all safe cells! You Win!")
 
     def reveal_area(self, r, c):
-        bttn = self.buttons[(r, c)]
+        bttn = self.buttons[r][c]
         if bttn['state'] == 'disabled':
             return
 
@@ -110,7 +116,7 @@ class MinesweeperGame:
                         self.reveal_area(nr, nc)
 
     def handle_flag(self, r, c):
-        bttn = self.buttons[(r, c)]
+        bttn = self.buttons[r][c]
         if bttn['state'] == 'disabled':
             return
         
@@ -121,7 +127,7 @@ class MinesweeperGame:
 
     def show_all_mines(self):
         for r, c in self.mine_locations:
-            self.buttons[(r, c)].config(text="M", bg="red")
+            self.buttons[r][c].config(text="M", bg="red")
 
     def end_game(self, message):
         self.game_over = True
